@@ -1,0 +1,23 @@
+{
+  "name": "fb_chat_bot",
+  "version": "1.0.0",
+  "description": "facebook chat bot for page",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tdnh/fb_chat_bot.git"
+  },
+  "author": "tile",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tdnh/fb_chat_bot/issues"
+  },
+  "homepage": "https://github.com/tdnh/fb_chat_bot#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
