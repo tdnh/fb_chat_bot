@@ -38,12 +38,8 @@ app.get('/webhook', function(req, res) {
 
 
 app.post('/webhook', function (req, res) {
-  // console.log('req.body');
-  // console.log(req.body);
   var data = req.body;
-
   // Make sure this is a page subscription
-  // console.log(data.object);
   if (data.object === 'page') {
 
     // Iterate over each entry - there may be multiple if batched
@@ -85,7 +81,7 @@ function receivedMessage(event) {
 
   console.log("Received message for user %d and page %d at %d with message:",
     senderID, recipientID, timeOfMessage);
-  console.log(JSON.stringify(message));
+  // console.log(JSON.stringify(message));
 
   var messageId = message.mid;
 
@@ -100,13 +96,49 @@ function receivedMessage(event) {
       case 'generic':
         sendGenericMessage(senderID);
         break;
-
+      case 'film':
+        sendLinkFilm(senderID);
+        break;
       default:
         sendTextMessage(senderID, messageText);
     }
   } else if (messageAttachments) {
     sendTextMessage(senderID, "Message with attachment received");
   }
+}
+
+
+function sendLinkFilm(recipientId, messageText) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      attachment: {
+        type: "template",
+        payload: {
+          template_type: "film",
+          elements: [{
+            title: "Film",
+            subtitle: "Top film for you",
+            item_url: "https://i.ytimg.com/vi/iBFrKgaMYv4/maxresdefault.jpg",
+            image_url: "https://i.ytimg.com/vi/iBFrKgaMYv4/maxresdefault.jpg",
+            buttons: [{
+              type: "web_url",
+              url: "http://www.esquire.com/entertainment/movies/a52209/best-movies-of-2017/",
+              title: "Open Web URL"
+            }, {
+              type: "postback",
+              title: "Call Postback",
+              payload: "Payload for first bubble",
+            }],
+          }]
+        }
+      }
+    }
+  };
+
+  callSendAPI(messageData);
 }
 
 
@@ -135,20 +167,6 @@ function sendGenericMessage(recipientId, messageText) {
               title: "Call Postback",
               payload: "Payload for first bubble",
             }],
-          }, {
-            title: "touch",
-            subtitle: "Your Hands, Now in VR",
-            item_url: "https://www.oculus.com/en-us/touch/",
-            image_url: "http://messengerdemo.parseapp.com/img/touch.png",
-            buttons: [{
-              type: "web_url",
-              url: "https://www.oculus.com/en-us/touch/",
-              title: "Open Web URL"
-            }, {
-              type: "postback",
-              title: "Call Postback",
-              payload: "Payload for second bubble",
-            }]
           }]
         }
       }
@@ -163,7 +181,7 @@ function sendGenericMessage(recipientId, messageText) {
 
 function callSendAPI(messageData) {
   request({
-    uri: 'https://graph.facebook.com/v2.6/me/messages',
+    uri: 'https://graph.facebook.com/v2.10/me/messages',
     qs: { access_token: PAGE_ACCESS_TOKEN },
     method: 'POST',
     json: messageData
@@ -177,7 +195,7 @@ function callSendAPI(messageData) {
         messageId, recipientId);
     } else {
       console.error("Unable to send message.");
-      console.error(response);
+      // console.error(response);
       console.error(error);
     }
   });
