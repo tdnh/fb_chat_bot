@@ -50,11 +50,13 @@ app.post('/webhook', function (req, res) {
     data.entry.forEach(function(entry) {
       console.log('-------> entry');
       console.log(entry);
-      var pageID = entry.id;
-      var timeOfEvent = entry.time;
+      let pageID = entry.id;
+      let timeOfEvent = entry.time;
+
+      let listMessage = entry.messaging || entry.standby;
 
       // Iterate over each messaging event
-      entry.standby.forEach(function(event) {
+      listMessage.forEach(function(event) {
         if (event.message) {
           receivedMessage(event);
         } else if(event.postback) {
