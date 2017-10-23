@@ -38,12 +38,12 @@ app.get('/webhook', function(req, res) {
 
 
 app.post('/webhook', function (req, res) {
-  console.log('req.body');
-  console.log(req.body);
+  // console.log('req.body');
+  // console.log(req.body);
   var data = req.body;
 
   // Make sure this is a page subscription
-  console.log(data.object);
+  // console.log(data.object);
   if (data.object === 'page') {
 
     // Iterate over each entry - there may be multiple if batched
@@ -54,12 +54,12 @@ app.post('/webhook', function (req, res) {
       var timeOfEvent = entry.time;
 
       // Iterate over each messaging event
-      entry.messaging.forEach(function(event) {
+      entry.standby.forEach(function(event) {
         if (event.message) {
           receivedMessage(event);
-          handleMessage(sender_psid, webhook_event.message);
-        } else {
+        } else if(event.postback) {
           console.log("Webhook received unknown event: ", event);
+          receivedPostback(event);
         }
       });
     });
