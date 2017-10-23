@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/tdnh/fb_chat_bot#readme",
   "dependencies": {
+    "body-parser": "^1.18.2",
     "express": "^4.16.2"
   }
 }

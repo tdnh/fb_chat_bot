@@ -1,9 +1,11 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
+app.use(bodyParser.json());
 
 
 const port = process.env.PORT || 3000;
-// const VERIFY_TOKEN = 'EAAClMRFPpssBAHoBfMG8wZB9DMozcbiTbcSOTLXZByDq4pGZCpVJXCwhPMo1ZC3oyWiwfaVPBDzO12x6ZCmyDbAidOBAIeBNKZAdg6hfZCYe4Hf184HbosFAUOhK8ACuyZALa5QLNbcCIOiNQejeplqLd5yydjte5TVc4mGiyI7NtwZDZD';
+const PAGE_ACCESS_TOKEN = 'EAANLWPEWDLMBAOWgoaJUeTWk9zrIG7tht6I1ROaTBN8yvEoLPFgFgbVEsVSjslwin4N9AtMh35jRlLshX9R7zwPEY9QnwOcYEa8ql9aw6YuKr3nLct4EAPO2BY1bCF35tf6hjaLYqifm4fpmsR7ZATTKKORUctI3nZAPHiISfAoE0jzXUL';
 const VERIFY_TOKEN = 'my_token_text_verify';
 
 
@@ -35,14 +37,18 @@ app.get('/webhook', function(req, res) {
 
 
 app.post('/webhook', function (req, res) {
+  console.log('req.body');
   console.log(req.body);
   var data = req.body;
 
   // Make sure this is a page subscription
+  console.log(data.object);
   if (data.object === 'page') {
 
     // Iterate over each entry - there may be multiple if batched
     data.entry.forEach(function(entry) {
+      console.log('-------> entry');
+      console.log(entry);
       var pageID = entry.id;
       var timeOfEvent = entry.time;
 
@@ -50,6 +56,7 @@ app.post('/webhook', function (req, res) {
       entry.messaging.forEach(function(event) {
         if (event.message) {
           receivedMessage(event);
+          handleMessage(sender_psid, webhook_event.message);
         } else {
           console.log("Webhook received unknown event: ", event);
         }
@@ -153,7 +160,7 @@ function sendGenericMessage(recipientId, messageText) {
 
 function callSendAPI(messageData) {
   request({
-    uri: 'https://graph.facebook.com/v2.10/me/messages',
+    uri: 'https://graph.facebook.com/v2.6/me/messages',
     qs: { access_token: PAGE_ACCESS_TOKEN },
     method: 'POST',
     json: messageData
@@ -190,7 +197,7 @@ function receivedPostback(event) {
   // When a postback is called, we'll send a message back to the sender to
   // let them know it was successful
   sendTextMessage(senderID, "Postback called");
-}
+};
 
 
 
