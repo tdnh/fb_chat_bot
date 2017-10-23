@@ -117,11 +117,11 @@ function sendLinkFilm(recipientId, messageText) {
       attachment: {
         type: "template",
         payload: {
-          template_type: "film",
+          template_type: "generic",
           elements: [{
             title: "Film",
             subtitle: "Top film for you",
-            item_url: "https://i.ytimg.com/vi/iBFrKgaMYv4/maxresdefault.jpg",
+            item_url: "",
             image_url: "https://i.ytimg.com/vi/iBFrKgaMYv4/maxresdefault.jpg",
             buttons: [{
               type: "web_url",
@@ -195,7 +195,7 @@ function callSendAPI(messageData) {
         messageId, recipientId);
     } else {
       console.error("Unable to send message.");
-      // console.error(response);
+      console.error(body);
       console.error(error);
     }
   });
