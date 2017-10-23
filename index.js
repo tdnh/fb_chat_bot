@@ -179,6 +179,20 @@ function callSendAPI(messageData) {
       console.error(error);
     }
   });
+};
+
+
+function sendTextMessage(recipientId, messageText) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: messageText
+    }
+  };
+
+  callSendAPI(messageData);
 }
 
 
@@ -199,7 +213,6 @@ function receivedPostback(event) {
   // let them know it was successful
   sendTextMessage(senderID, "Postback called");
 };
-
 
 
 const server = require('http').createServer(app);
